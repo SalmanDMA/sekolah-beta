@@ -1,25 +1,29 @@
 <template>
   <header class="navbar px-4 fixed z-50 w-full">
-    <div class="container mx-auto flex items-center justify-between py-4">
+    <section class="container mx-auto flex items-center justify-between py-4">
       <div class="">
         <nuxt-link to="/">
-          <h1 class="text-center md:text-start text-3xl font-bold text-white">
+          <h1
+            class="text-center md:text-start text-3xl font-bold text-white hover:scale-110 transition-all duration-300 ease-in-out"
+          >
             Rent<span class="text-orange-400">Here</span>
           </h1>
         </nuxt-link>
       </div>
       <nav class="hidden lg:flex space-x-4">
-        <nuxt-link :to="linkHome" class="nav-link">Home</nuxt-link>
-        <nuxt-link :to="linkCars" class="nav-link">Cars</nuxt-link>
-        <nuxt-link :to="linkBikes" class="nav-link">Bikes</nuxt-link>
-        <nuxt-link :to="linkServices" class="nav-link">Services</nuxt-link>
-        <nuxt-link :to="linkTestimonials" class="nav-link"
-          >Testimonials</nuxt-link
+        <nuxt-link
+          v-for="(link, index) in navigationData"
+          :key="index"
+          :to="link.to"
+          class="nav-link"
+          :class="{
+            'nuxt-link-exact-active': isCarsRoute && link.to === '/cars',
+          }"
         >
-        <nuxt-link :to="linkContact" class="nav-link">Contact</nuxt-link>
-        <nuxt-link :to="linkFormData" class="nav-link">Form Data</nuxt-link>
+          {{ link.text }}
+        </nuxt-link>
       </nav>
-      <nuxt-link to="/login">
+      <nuxt-link :to="linkLogin">
         <button type="button" class="hidden lg:block login-button">
           Login
         </button>
@@ -34,63 +38,67 @@
         <div class="bar"></div>
         <div class="bar"></div>
       </button>
-    </div>
-    <div v-if="showSidebar" class="sidebar" :class="sidebarClasses">
+    </section>
+    <section v-if="showSidebar" class="sidebar" :class="sidebarClasses">
       <button type="button" class="sidebar-close" @click="toggleSidebar">
-        X
+        <fa :icon="['fas', 'xmark']" />
       </button>
       <nav class="sidebar-links">
-        <nuxt-link :to="linkHome" class="sidebar-link">Home</nuxt-link>
-        <nuxt-link :to="linkCars" class="sidebar-link">Cars</nuxt-link>
-        <nuxt-link :to="linkBikes" class="sidebar-link">Bikes</nuxt-link>
-        <nuxt-link :to="linkServices" class="sidebar-link">Services</nuxt-link>
-        <nuxt-link :to="linkTestimonials" class="sidebar-link"
-          >Testimonials</nuxt-link
+        <nuxt-link
+          v-for="(link, index) in navigationData"
+          :key="index"
+          :to="link.to"
+          class="sidebar-link"
+          :class="{ active: isCarsRoute && link.to === '/cars' }"
         >
-        <nuxt-link :to="linkContact" class="sidebar-link">Contact</nuxt-link>
-        <nuxt-link :to="linkFormData" class="sidebar-link">Form Data</nuxt-link>
+          {{ link.text }}
+        </nuxt-link>
         <nuxt-link :to="linkLogin">
           <button type="button" class="sidebar-login-button">Login</button>
         </nuxt-link>
       </nav>
-    </div>
-    <div v-if="showOverlay" class="overlay" @click="toggleSidebar"></div>
+    </section>
+    <section
+      v-if="showOverlay"
+      class="overlay"
+      @click="toggleSidebar"
+    ></section>
   </header>
 </template>
 
 <script>
-import {
-  linkHome,
-  linkContact,
-  linkCars,
-  linkBikes,
-  linkServices,
-  linkTestimonials,
-  linkLogin,
-  linkFormData,
-} from '@/helpers/linkData'
+import { linkHome, linkLogin } from '@/helpers/linkData'
+import navigationData from '@/helpers/navigationData'
 export default {
   data() {
     return {
       showSidebar: false,
       showOverlay: false,
+      showAnimation: false,
       linkHome,
-      linkContact,
-      linkCars,
-      linkBikes,
-      linkServices,
-      linkTestimonials,
       linkLogin,
-      linkFormData,
+      navigationData,
     }
   },
   computed: {
     sidebarClasses() {
-      return this.showSidebar ? 'active' : 'deactive'
+      return this.showAnimation ? 'active' : 'deactive'
+    },
+    isCarsRoute() {
+      return this.$route.path.startsWith('/cars/')
     },
   },
   methods: {
     toggleSidebar() {
+      if (this.showAnimation) {
+        this.showAnimation = !this.showAnimation
+        setTimeout(() => {
+          this.showSidebar = !this.showSidebar
+          this.showOverlay = !this.showOverlay
+        }, 400)
+        return
+      }
+      this.showAnimation = !this.showAnimation
       this.showSidebar = !this.showSidebar
       this.showOverlay = !this.showOverlay
     },
@@ -99,7 +107,8 @@ export default {
 </script>
 
 <style scoped>
-.nav-link.nuxt-link-exact-active {
+.nav-link.nuxt-link-exact-active,
+.sidebar-link.nuxt-link-exact-active {
   @apply text-orange-400 border-b border-b-orange-400;
 }
 /* Navbar styles */

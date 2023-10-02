@@ -6,7 +6,7 @@
         <div class="mb-4">
           <router-link :to="linkHome">
             <h1
-              class="text-center md:text-start text-3xl font-bold text-white mb-4"
+              class="text-center md:text-start text-3xl font-bold text-white mb-4 hover:scale-110 transition-all duration-300 ease-in-out"
             >
               Rent<span class="text-orange-400">Here</span>
             </h1>
@@ -48,46 +48,13 @@
           </h5>
           <ul class="flex flex-col flex-wrap justify-center items-center gap-2">
             <li
+              v-for="(item, index) in navigationData"
+              :key="index"
               class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
             >
-              <router-link :to="linkHome" class="text-white">
-                Home
-              </router-link>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <router-link :to="linkContact" class="text-white">
-                Contact
-              </router-link>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <router-link :to="linkCars" class="text-white">
-                Cars
-              </router-link>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <router-link :to="linkBikes" class="text-white">
-                Bikes
-              </router-link>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <router-link :to="linkServices" class="text-white">
-                Services
-              </router-link>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <router-link :to="linkTestimonials" class="text-white">
-                Testimonials
-              </router-link>
+              <router-link :to="item.to" class="text-white">{{
+                item.text
+              }}</router-link>
             </li>
           </ul>
         </div>
@@ -110,34 +77,12 @@
               </p>
             </li>
             <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
+              v-for="(socialMedia, index) in socialMediaData"
+              :key="index"
+              class="text-gray-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
             >
-              <fa :icon="['fab', 'facebook']" />
-              <a href="https://www.facebook.com/">RentHere</a>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <fa :icon="['fab', 'instagram']" />
-              <a href="https://www.instagram.com/">RentHere</a>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <fa :icon="['fab', 'youtube']" />
-              <a href="https://www.youtube.com/">RentHere</a>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <fa :icon="['fab', 'whatsapp']" />
-              <a href="https://www.whatsapp.com/">RentHere</a>
-            </li>
-            <li
-              class="text-slate-300 transition-colors duration-300 hover:text-white hvr-underline-from-left max-w-max"
-            >
-              <fa :icon="['fab', 'tiktok']" />
-              <a href="https://www.tiktok.com/">RentHere</a>
+              <fa :icon="socialMedia.icon" />
+              <a :href="socialMedia.url">{{ socialMedia.name }}</a>
             </li>
           </ul>
         </div>
@@ -156,25 +101,17 @@
 </template>
 
 <script>
-import {
-  linkHome,
-  linkContact,
-  linkCars,
-  linkBikes,
-  linkServices,
-  linkTestimonials,
-} from '@/helpers/linkData'
+import { linkHome } from '@/helpers/linkData'
+import navigationData from '@/helpers/navigationData'
+import socialMediaData from '@/helpers/socialMediaData'
 
 export default {
   name: 'FooterLayout',
   data() {
     return {
       linkHome,
-      linkContact,
-      linkCars,
-      linkBikes,
-      linkServices,
-      linkTestimonials,
+      socialMediaData,
+      navigationData,
     }
   },
 }

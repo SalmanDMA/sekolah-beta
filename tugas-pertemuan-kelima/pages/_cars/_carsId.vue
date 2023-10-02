@@ -6,7 +6,7 @@
           <img
             :src="car.image"
             :alt="car.name"
-            class="w-full h-[300px] object-cover rounded-lg"
+            class="w-full h-full object-cover object-center rounded-lg"
           />
         </div>
         <div class="mb-4">
@@ -29,7 +29,7 @@
         </button>
       </section>
       <section
-        v-if="recommendations.length > 0"
+        v-if="recommendations?.length > 0"
         class="bg-white rounded-lg shadow-lg p-5"
       >
         <h2 class="text-xl font-semibold mb-3">Rekomendasi Mobil</h2>
@@ -46,7 +46,7 @@
             />
             <div class="mt-2">
               <h3
-                class="text-lg w-full max-w-[180px] font-semibold text-[#333] md:h-[60px]"
+                class="text-lg w-full max-w-[180px] font-semibold text-[#333] truncate"
               >
                 {{ recommendation.name }}
               </h3>
@@ -75,15 +75,17 @@ export default {
   name: 'CarsId',
   async asyncData({ params }) {
     const paramId = Number(params.carsId)
-    const car = await carsData.find((car) => car.id === paramId)
+    const copyCarsData = JSON.parse(JSON.stringify(carsData))
+    const car = await copyCarsData.find((car) => car.id === paramId)
     if (!car) {
       return {
         notFound: true,
         car: null,
+        recommendations: null,
       }
     }
 
-    const shuffledCars = carsData.sort(() => Math.random() - 0.5)
+    const shuffledCars = copyCarsData.sort(() => Math.random() - 0.5)
     const recommendations = shuffledCars.slice(0, 5)
 
     return {

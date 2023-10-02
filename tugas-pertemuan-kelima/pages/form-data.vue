@@ -52,9 +52,7 @@
               v-model="formData.category"
               type="text"
               class="w-full p-2 border rounded-md border-gray-300 flex-[4]"
-              :class="{
-                'border-red-500 focus:outline-red-500': hasError('category'),
-              }"
+              :class="{ 'error-input': hasError('category') }"
               @input="validateInput('category')"
             />
           </div>
@@ -71,9 +69,7 @@
               id="description"
               v-model="formData.description"
               class="w-full p-2 border rounded-md border-gray-300 flex-[4]"
-              :class="{
-                'border-red-500 focus:outline-red-500': hasError('description'),
-              }"
+              :class="{ 'error-input': hasError('description') }"
               rows="4"
               @input="validateInput('description')"
             ></textarea>
@@ -92,9 +88,7 @@
               v-model="formData.qty"
               type="text"
               class="w-full p-2 border rounded-md border-gray-300 flex-[4]"
-              :class="{
-                'border-red-500 focus:outline-red-500': hasError('qty'),
-              }"
+              :class="{ 'error-input': hasError('qty') }"
               @input="validateInput('qty')"
             />
           </div>
@@ -112,9 +106,7 @@
               v-model="formData.price"
               type="text"
               class="w-full p-2 border rounded-md border-gray-300 flex-[4]"
-              :class="{
-                'border-red-500 focus:outline-red-500': hasError('price'),
-              }"
+              :class="{ 'error-input': hasError('price') }"
               @input="validateInput('price')"
             />
           </div>
@@ -126,15 +118,8 @@
           <div class="mt-6">
             <button
               type="submit"
-              class="bg-[#333] text-white py-2 px-4 rounded-lg hover:bg-orange-400 transition-colors duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-300"
-              :disabled="
-                hasError('name') ||
-                hasError('image') ||
-                hasError('category') ||
-                hasError('description') ||
-                hasError('qty') ||
-                hasError('price')
-              "
+              class="bg-[#333] text-white px-4 py-2 rounded-md hover:bg-orange-400 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-300"
+              :disabled="isFormInvalid"
             >
               Add Card
             </button>
@@ -149,7 +134,6 @@
 import carsData from '~/helpers/carsDataDummy'
 
 export default {
-  name: 'FormData',
   data() {
     return {
       formData: {
@@ -161,18 +145,30 @@ export default {
         price: '',
       },
       carsData,
-      errors: {},
+      errors: {
+        name: '',
+        image: '',
+        category: '',
+        description: '',
+        qty: '',
+        price: '',
+      },
+    }
+  },
+  head() {
+    return {
+      title: 'Form Data',
     }
   },
   computed: {
     isFormInvalid() {
       return (
-        this.hasError('name') ||
-        this.hasError('image') ||
-        this.hasError('category') ||
-        this.hasError('description') ||
-        this.hasError('qty') ||
-        this.hasError('price')
+        !!this.errors.name ||
+        !!this.errors.image ||
+        !!this.errors.category ||
+        !!this.errors.description ||
+        !!this.errors.qty ||
+        !!this.errors.price
       )
     },
   },
@@ -185,7 +181,6 @@ export default {
     },
     validateInput(inputName) {
       const value = this.formData[inputName]
-
       if (!value) {
         this.errors[inputName] = `${
           inputName.charAt(0).toUpperCase() + inputName.slice(1)

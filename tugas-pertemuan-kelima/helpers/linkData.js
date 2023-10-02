@@ -4,7 +4,7 @@ const linkCars = '/cars'
 const linkBikes = '/bikes'
 const linkServices = '/services'
 const linkTestimonials = '/testimonials'
-const linkLogin = '/login'
+const linkLogin = '/auth'
 const linkFormData = '/form-data'
 
 export {
